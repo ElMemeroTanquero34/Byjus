@@ -121,4 +121,4 @@ function spawnDoors()
     //agregar cada obstáculo al grupo obstaclesGroup.add(obstacle);aquí los obstáculos son la puerta, la barandilla y el bloque invisible
   }
 }
-
+Tengo un problema y es que cuando el fantasma toca la puerta, no se porque no se muere. Me podria ayudar con eso? gracias.
