@@ -1,1 +1,137 @@
 
+const Engine = Matter.Engine;
+const World = Matter.World;
+const Bodies = Matter.Bodies;
+const Constraint = Matter.Constraint;
+
+var engine, world;
+var canvas;
+var palyer, playerBase;
+var computer, computerBase;
+
+var arrow;
+
+
+function setup() {
+  canvas = createCanvas(windowWidth, windowHeight);
+
+  engine = Engine.create();
+  world = engine.world;
+
+  playerBase = new PlayerBase(300, random(450, height - 300), 180, 150);
+  player = new Player(285, playerBase.body.position.y - 153, 50, 180);
+  playerArcher = new PlayerArcher(
+    340,
+    playerBase.body.position.y - 180,
+    120,
+    120
+  );
+
+  computerBase = new ComputerBase(
+    width - 300,
+    random(450, height - 300),
+    180,
+    150
+  );
+  computer = new Computer(
+    width - 280,
+    computerBase.body.position.y - 153,
+    50,
+    180
+  );
+  computerArcher = new ComputerArcher(
+    width - 340,
+    computerBase.body.position.y - 180,
+    120,
+    120
+  );
+  
+  arrow = new PlayerArrow(playerArcher.body.position.x, playerArcher.body.position.y, 100, 10);
+  
+}
+
+function draw() {
+  background(180);
+
+  Engine.update(engine);
+
+  // Título
+  fill("#FFFF");
+  textAlign("center");
+  textSize(40);
+  text("TIRO CON ARCO ÉPICO", width / 2, 100);
+
+ 
+  playerBase.display();
+  player.display();
+  
+
+  computerBase.display();
+  computer.display();
+  
+  playerArcher.display();
+  computerArcher.display()
+  
+  // if(keyCode === 32){
+  //   arrow.display()
+  //   arrow.shoot(playerArcher);
+  //  }
+
+  //  if(keyCode === 32){
+  //   arrow.shoot(playerArcher.body.angle);
+  //  }
+   
+  if(keyCode === 32){
+    arrow.display()
+    arrow.shoot(playerArcher.body.angle);
+   }
+}
+
+sketch.js
+
+
+
+
+class PlayerArcher {
+    constructor(x, y, width, height) {
+      const options = {
+        isStatic: true
+      };
+  
+      this.body = Matter.Bodies.rectangle(x, y, width, height, options);
+      this.width = width;
+      this.height = height;
+      //this.collapse = false;
+      this.image = loadImage("./assets/playerArcher.png");
+  
+      World.add(world, this.body);
+  
+      Matter.Body.setAngle(this.body, -PI / 2); 
+      
+    }
+  
+    display() {
+      var pos = this.body.position;
+      var angle = this.body.angle;
+      
+      if (keyIsDown(DOWN_ARROW) && angle < -1.2) {
+        angle += 0.01;
+        Matter.Body.setAngle(this.body, angle);
+      }
+  
+      if (keyIsDown(UP_ARROW) && angle > -1.9) {
+        angle -= 0.01;
+        Matter.Body.setAngle(this.body, angle);
+      }
+      
+      push();
+      translate(pos.x, pos.y);
+      rotate(angle);
+      imageMode(CENTER);
+      image(this.image, 0, 0, this.width, this.height);
+      pop();
+    }
+  }
+  playerArcher.js
+
+(RECORDATORIO: OPRIME ESPACIO PARA LANZAR LA FLECHA (dejalo presionado cuando ya lo vayas a lanzar), Y PARA MOVERTE CON LAS FLECHITAS DE ABAJO Y ARRIBA.
